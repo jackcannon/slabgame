@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Slab Game!</title>
+    <link rel="icon" type="image/png" href="./img/slab.png" />
     <style>
     html {
       text-align: center;
@@ -20,16 +21,8 @@
       height: 100%;
     }
 
-    /*.shineTemplates {
-      display: none;
-      width: 200px;
-      height: 200px;
-    }*/
-
-    #block img { width: 150px; height: 146px; }
-    #pillar img { width: 79px; height: 150px; }
-    #slab img { width: 150px; height: 106px; }
-    #beam img { width: 150px; height: 131px; }
+    .option img { width: 150px; height: 150px; }
+    #thoughtImage { width: 100px; height: 100px; }
 
     #choices {
       display: table;
@@ -52,13 +45,13 @@
       .option img.pic {
         
       }
-        .option:hover img.pic {
+        .option:hover img.pic, .option.looking img.pic {
           transform: rotate(4deg) scale(1.05);
           -ms-transform: rotate(4deg) scale(1.05); /* IE 9 */
           -moz-transform: rotate(4deg) scale(1.05);
           -webkit-transform: rotate(4deg) scale(1.05); /* Safari and Chrome */
         }
-        .option:nth-child(even):hover img.pic {
+        .option:nth-child(even):hover img.pic, .option:nth-child(even).looking img.pic {
           transform: rotate(-4deg) scale(1.05);
           -ms-transform: rotate(-4deg) scale(1.05); /* IE 9 */
           -moz-transform: rotate(-4deg) scale(1.05); 
@@ -69,12 +62,14 @@
           -ms-transform: rotate(4deg) scale(1); /* IE 9 */
           -moz-transform: rotate(4deg) scale(1);
           -webkit-transform: rotate(4deg) scale(1); /* Safari and Chrome */
+          border: 2px solid red;
         }
         .option:nth-child(even):active img.pic {
           transform: rotate(-4deg) scale(1);
           -ms-transform: rotate(-4deg) scale(1); /* IE 9 */
           -moz-transform: rotate(-4deg) scale(1);
           -webkit-transform: rotate(-4deg) scale(1); /* Safari and Chrome */
+          border: 2px solid red;
         }
 
         .option.chosen.correct {
@@ -96,7 +91,7 @@
       }
 
       #speechBubble {
-        background-image: url('./img/bubble.png');
+        background-image: url('./img/speech.png');
         width: 172px;
         height: 145px;
         position: absolute;
@@ -110,6 +105,28 @@
           font-family: Garamond;
         }
 
+      #apprentice {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+      }
+
+      #thoughtBubble {
+        background-image: url('./img/thought.png');
+        width: 253px;
+        height: 159px;
+        position: absolute;
+        bottom: 175px;
+        left: 175px;
+        display: none;
+      }
+
+        #thoughtImage {
+          position: relative;
+          top: 25px;
+          right: -25px;
+        }
+
     </style>
   </head>
   <body>
@@ -120,13 +137,14 @@
       <div id="beam" class="option"><img src="./img/beam.png" class="pic" /></div>
     </div>
 
-    <!-- <img class="shineTemplates" id="shine-white" src="./img/shine-white.png" />
-    <img class="shineTemplates" id="shine-green" src="./img/shine-green.png" />
-    <img class="shineTemplates" id="shine-red" src="./img/shine-red.png" /> -->
-    
     <img id="witt" src="./img/witt.png" />
     <div id="speechBubble">
       <p id="speechText"></p>
+    </div>
+
+    <img id="apprentice" src="./img/apprentice.png" />
+    <div id="thoughtBubble">
+      <img id="thoughtImage" src="" />
     </div>
 
     <script src="./js/jquery-2.0.3.min.js"></script>
@@ -136,52 +154,19 @@
       var options = ['block', 'pillar', 'slab', 'beam'];
       var correctAnswer = '';
       var canClick = true;
-      // var currentImages = {
-      //   white: null,
-      //   green: null,
-      //   red: null
-      // }
-      // var imageRotation = 0;
+      var round = 0;
 
       $('.option').click(function (e) {
         if(canClick) {
           canClick = false;
           $(e.currentTarget).addClass('chosen');
           $('#speechBubble').hide();
+          $('#thoughtBubble').hide();
           setTimeout(function () {
             setup();
-          }, 5000);
+          }, 3000);
         }
       });
-
-      // $(".option")
-      //   .mouseenter(function(e) {
-      //     $( this ).css('background-image', currentImages.white);
-      //   })
-      //   .mouseleave(function(e) {
-      //     $( this ).css('background-image', 'none');
-      //   });
-
-      // function setImages() {
-      //   currentImages.white = 'url(' + shine.white[imageRotation] + ')';
-      //   currentImages.green = 'url(' + shine.green[imageRotation] + ')';
-      //   currentImages.red = 'url(' + shine.red[imageRotation] + ')';
-      //   imageRotation++;
-      //   if(imageRotation == 200) imageRotation = 0;
-
-      //   $('.option').each(function (k, i) {
-      //     var item = $(i);
-      //     if(item.hasClass('chosen')) { // is coloured shine
-      //       if(item.hasClass('correct')) { // is green shine
-      //         item.css('background-image', currentImages.green);
-      //       } else { // is red shine
-      //         item.css('background-image', currentImages.red);
-      //       }
-      //     } else if(item.css('background-image') !== 'none') { // is white shine
-      //       item.css('background-image', 'none');
-      //     }
-      //   });
-      // }
 
       function setup() {
         canClick = true;
@@ -193,6 +178,15 @@
         $('#' + correctAnswer).addClass('correct');
         $('#speechBubble').show();
         $('#speechText').html(helper.capitalise(correctAnswer) + '!');
+        setTimeout(function () {
+          $('#thoughtBubble').show();
+          if(round == 4) {
+            $('#thoughtImage').attr('src', './img/football.png');
+          } else {
+            $('#thoughtImage').attr('src', './img/' + correctAnswer + '.png');
+          }
+          round++;
+        }, 1000);
       }
 
       var helper = {
@@ -203,9 +197,6 @@
         }
       }
 
-      // setInterval(setImages, 25);
-
-      // setImages();
       setup();
 
       window.helper = helper;

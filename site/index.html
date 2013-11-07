@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Slab Game!</title>
+    <style>
+    html {
+      text-align: center;
+      background-image: url('./img/bg.png');
+      background-size: cover;
+      background-repeat: repeat-y;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      background-color: rgba(0,0,0,0.75);
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /*.shineTemplates {
+      display: none;
+      width: 200px;
+      height: 200px;
+    }*/
+
+    #block img { width: 150px; height: 146px; }
+    #pillar img { width: 79px; height: 150px; }
+    #slab img { width: 150px; height: 106px; }
+    #beam img { width: 150px; height: 131px; }
+
+    #choices {
+      display: table;
+      margin: auto;
+    }
+
+    .option {
+      width: 200px;
+      height: 200px;
+      display: table-cell;
+      vertical-align: middle;
+      position: relative;
+      overflow: hidden;
+      background-repeat: no-repeat;
+    }
+      .option:hover {
+        background-image: url('./img/shine-white.png');
+      }
+
+      .option img.pic {
+        
+      }
+        .option:hover img.pic {
+          transform: rotate(4deg) scale(1.05);
+          -ms-transform: rotate(4deg) scale(1.05); /* IE 9 */
+          -moz-transform: rotate(4deg) scale(1.05);
+          -webkit-transform: rotate(4deg) scale(1.05); /* Safari and Chrome */
+        }
+        .option:nth-child(even):hover img.pic {
+          transform: rotate(-4deg) scale(1.05);
+          -ms-transform: rotate(-4deg) scale(1.05); /* IE 9 */
+          -moz-transform: rotate(-4deg) scale(1.05); 
+          -webkit-transform: rotate(-4deg) scale(1.05); /* Safari and Chrome */
+        }
+        .option:active img.pic {
+          transform: rotate(4deg) scale(1);
+          -ms-transform: rotate(4deg) scale(1); /* IE 9 */
+          -moz-transform: rotate(4deg) scale(1);
+          -webkit-transform: rotate(4deg) scale(1); /* Safari and Chrome */
+        }
+        .option:nth-child(even):active img.pic {
+          transform: rotate(-4deg) scale(1);
+          -ms-transform: rotate(-4deg) scale(1); /* IE 9 */
+          -moz-transform: rotate(-4deg) scale(1);
+          -webkit-transform: rotate(-4deg) scale(1); /* Safari and Chrome */
+        }
+
+        .option.chosen.correct {
+          background-image: url('./img/shine-green.png');
+        }
+
+        .option.chosen.wrong {
+          background-image: url('./img/shine-red.png');
+        }
+
+        .option.looking {
+          background-image: url('./img/shine-white.png');
+        }
+
+      #witt {
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+      }
+
+      #speechBubble {
+        background-image: url('./img/bubble.png');
+        width: 172px;
+        height: 145px;
+        position: absolute;
+        bottom: 125px;
+        right: 125px;
+        display: none;
+      }
+
+        #speechText {
+          font-size: 25px;
+          font-family: Garamond;
+        }
+
+    </style>
+  </head>
+  <body>
+    <div id="choices">
+      <div id="block" class="option"><img src="./img/block.png" class="pic" /></div>
+      <div id="pillar" class="option"><img src="./img/pillar.png" class="pic" /></div>
+      <div id="slab" class="option"><img src="./img/slab.png" class="pic" /></div>
+      <div id="beam" class="option"><img src="./img/beam.png" class="pic" /></div>
+    </div>
+
+    <!-- <img class="shineTemplates" id="shine-white" src="./img/shine-white.png" />
+    <img class="shineTemplates" id="shine-green" src="./img/shine-green.png" />
+    <img class="shineTemplates" id="shine-red" src="./img/shine-red.png" /> -->
+    
+    <img id="witt" src="./img/witt.png" />
+    <div id="speechBubble">
+      <p id="speechText"></p>
+    </div>
+
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script src="./js/shineImages.js"></script>
+    <script>
+
+    (function () {
+      var options = ['block', 'pillar', 'slab', 'beam'];
+      var correctAnswer = '';
+      var canClick = true;
+      // var currentImages = {
+      //   white: null,
+      //   green: null,
+      //   red: null
+      // }
+      // var imageRotation = 0;
+
+      $('.option').click(function (e) {
+        if(canClick) {
+          canClick = false;
+          $(e.currentTarget).addClass('chosen');
+          $('#speechBubble').hide();
+          setTimeout(function () {
+            setup();
+          }, 5000);
+        }
+      });
+
+      // $(".option")
+      //   .mouseenter(function(e) {
+      //     $( this ).css('background-image', currentImages.white);
+      //   })
+      //   .mouseleave(function(e) {
+      //     $( this ).css('background-image', 'none');
+      //   });
+
+      // function setImages() {
+      //   currentImages.white = 'url(' + shine.white[imageRotation] + ')';
+      //   currentImages.green = 'url(' + shine.green[imageRotation] + ')';
+      //   currentImages.red = 'url(' + shine.red[imageRotation] + ')';
+      //   imageRotation++;
+      //   if(imageRotation == 200) imageRotation = 0;
+
+      //   $('.option').each(function (k, i) {
+      //     var item = $(i);
+      //     if(item.hasClass('chosen')) { // is coloured shine
+      //       if(item.hasClass('correct')) { // is green shine
+      //         item.css('background-image', currentImages.green);
+      //       } else { // is red shine
+      //         item.css('background-image', currentImages.red);
+      //       }
+      //     } else if(item.css('background-image') !== 'none') { // is white shine
+      //       item.css('background-image', 'none');
+      //     }
+      //   });
+      // }
+
+      function setup() {
+        canClick = true;
+        correctAnswer = options[Math.floor(Math.random() * 4)];
+        $('.option').removeClass('chosen');
+        $('.option').removeClass('correct');
+        $('.option').addClass('wrong');
+        $('#' + correctAnswer).removeClass('wrong');
+        $('#' + correctAnswer).addClass('correct');
+        $('#speechBubble').show();
+        $('#speechText').html(helper.capitalise(correctAnswer) + '!');
+      }
+
+      var helper = {
+        capitalise: function (str) {
+          if(typeof str !== 'string' || str.length == 0) return str;
+          if(str.length == 1) return s.toUpperCase();
+          return str.substr(0,1).toUpperCase() + str.substr(1).toLowerCase();
+        }
+      }
+
+      // setInterval(setImages, 25);
+
+      // setImages();
+      setup();
+
+      window.helper = helper;
+
+    }());
+    </script>
+  </body>

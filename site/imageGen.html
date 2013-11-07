@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Image Generation!</title>
+    <style>
+      html {
+        background-color: #AA8888;
+      }
+
+      canvas {
+        border: 2px solid red;
+      }
+
+      #code {
+        font-family: monospace;
+        font-size: 8px;
+      }
+    </style>
+  </head>
+  <body>
+
+    <img id="source" src="./img/shine-red.png" />
+    <canvas id="draw"></canvas>
+    <img id="output" src="#" /><br/>
+
+    <p id="code"></p>
+
+    <script src="./js/jquery-2.0.3.min.js"></script>
+    <script>
+
+      var images = [];
+
+      var canvas = document.getElementById('draw');
+      var context = canvas.getContext('2d');
+      var source = document.getElementById('source');
+      var output = document.getElementById('output');
+
+      canvas.width = source.width;
+      canvas.height = source.height;
+
+      function run(angle) {
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+
+        context.save();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.translate(x, y);
+        context.rotate(angle * (Math.PI * 2));
+        context.drawImage(source, -(source.width/2), -(source.height/2));
+        var base64 = canvas.toDataURL('image/png');
+        output.src = base64;
+        images.push(base64);
+        context.restore();
+      }
+
+      var angle = 0;
+
+      var timer = setInterval(function () {
+        run(angle);
+        angle += 0.005;
+        if(angle >= 1) finish();
+      }, 25);
+
+
+      function finish() {
+        clearInterval(timer);
+        var string = "[";
+        for(var i in images) {
+          string += "'" + images[i] + "', ";
+        }
+        string += "]";
+        $('#code').html(string);
+      }
+
+    </script>
+  </body>

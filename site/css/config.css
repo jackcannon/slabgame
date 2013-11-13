@@ -1,0 +1,48 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+html {
+  background-image: url('../img/bg.png');
+  background-size: cover;
+  background-repeat: repeat-y;
+}
+
+body {
+  background-color: rgba(0,0,0,0) !important;
+}
+
+#rounds {
+  width: 750px;
+  margin: 0 auto;
+}
+
+#rounds li {
+  background-color: rgba(0, 0, 0, 0.5);
+  margin: 5px;
+  padding: 5px;
+  border-radius: 3px;
+  font-size: 18px;
+  font-family: Garamond;
+  color: white;
+}
+
+#rounds li select {
+  margin-bottom: 0;
+}
+
+#controls {
+  width: 750px;
+  margin: 0 auto;
+}
+
+#controls button, #rounds button.delete, #rounds .btn-group {
+  float: right;
+  margin: 0 2px;
+}
+
+button, select {
+  outline: none !important;
+}

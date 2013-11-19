@@ -89,7 +89,9 @@ server.get(function (data) {
 });
 
 $('#save').click(function () {
-  server.set(configFunctions.getFromPage());
+  server.set(configFunctions.getFromPage(), function () {
+    window.location.href = '/';
+  });
 });
 
 $('#addRound').click(function () {

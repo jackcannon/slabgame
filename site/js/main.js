@@ -2,9 +2,11 @@
   var images = [
     './img/apprentice.png',
     './img/beam.png',
+    './img/bed.png',
     './img/bg.png',
     './img/block.png',
     './img/football.png',
+    './img/pattinson.png',
     './img/pillar.png',
     './img/shine-green.png',
     './img/shine-red.png',
